@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\SavedProperty;
 use App\Models\VisitSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Transaction;
 use App\Models\Inquiry;
 
 class AuthController extends Controller
@@ -292,7 +290,7 @@ class AuthController extends Controller
 
         $visitSchedules = $user->visitSchedules()->latest()->limit(3)->get();
 
-        $totalTransactions = \App\Models\Transaction::where('user_id', $user->id)->where('payment_status', 'success')->count();
+        $totalTransactions = \App\Models\Transaction::where('user_id', $user->id)->count();
         $activeBookings = \App\Models\Transaction::where('user_id', $user->id)->where('payment_status', 'success')->count();
         $activeInquiriesCount = Inquiry::where('email', $user->email)->whereNull('reply')->count();
         $savedProperties = $user->savedProperties()->latest()->limit(3)->get();

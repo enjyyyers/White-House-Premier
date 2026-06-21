@@ -142,16 +142,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Sales & Users (Menu Transaksi Admin dengan Tab & Analitik)
     // 1. Halaman Utama Tabel Transaksi Admin
-    Route::get('/transactions', [App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transaction.index');
+    Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transaction.index');
 
     // 2. Halaman Detail Transaksi Admin
-    Route::get('/transactions/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'show'])->name('transaction.show');
+    Route::get('/transactions/{id}', [AdminTransactionController::class, 'show'])->name('transaction.show');
 
     // 3. Proses Update Status & Tipe Pembayaran (PUT)
-    Route::put('/transactions/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'updateStatus'])->name('transaction.update');
+    Route::put('/transactions/{id}', [AdminTransactionController::class, 'updateStatus'])->name('transaction.update');
 
     // 4. Proses Hapus Transaksi (DELETE)
-    Route::delete('/transactions/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'destroy'])->name('transaction.destroy');
+    Route::delete('/transactions/{id}', [AdminTransactionController::class, 'destroy'])->name('transaction.destroy');
 
     // Laporan Admin
     Route::get('/laporan-admin', [AdminReportController::class, 'index'])->name('laporan-admin.index');
