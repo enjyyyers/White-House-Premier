@@ -4,4 +4,4 @@ providers = ["php"]
 NIXPACKS_PHP_VERSION = "8.3"
 
 [phases.setup]
-nixPkgs = ["php83", "php83Extensions.gd", "php83Extensions.mbstring", "php83Extensions.openssl", "php83Extensions.pdo", "php83Extensions.tokenizer", "php83Extensions.xml", "php83Extensions.zip"]
+nixPkgs = ["php83", "php83Packages.composer", "php83Extensions.gd", "php83Extensions.mbstring", "php83Extensions.openssl", "php83Extensions.pdo", "php83Extensions.tokenizer", "php83Extensions.xml", "php83Extensions.zip"]
