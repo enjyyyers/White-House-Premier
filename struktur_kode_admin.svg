@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="'Courier New', monospace">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e6f0ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="whp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af" />
+      <stop offset="100%" style="stop-color:#3b82f6" />
+    </linearGradient>
+    <linearGradient id="adm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed" />
+      <stop offset="100%" style="stop-color:#a855f7" />
+    </linearGradient>
+    <linearGradient id="ini" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669" />
+      <stop offset="100%" style="stop-color:#10b981" />
+    </linearGradient>
+    <linearGradient id="jk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d97706" />
+      <stop offset="100%" style="stop-color:#f59e0b" />
+    </linearGradient>
+    <linearGradient id="thn" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626" />
+      <stop offset="100%" style="stop-color:#ef4444" />
+    </linearGradient>
+    <linearGradient id="seq" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0891b2" />
+      <stop offset="100%" style="stop-color:#22d3ee" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+    <filter id="codeShadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1e40af" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="520" rx="16" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e3a5f" font-family="'Segoe UI', Arial, sans-serif">
+    STRUKTUR KODE ADMIN
+  </text>
+  <text x="450" y="58" text-anchor="middle" font-size="11" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    White House Premiere — Format &amp; Komponen Kode Admin
+  </text>
+
+  <!-- Full Code Display -->
+  <rect x="100" y="80" width="700" height="60" rx="12" fill="#fff" filter="url(#codeShadow)"/>
+  <text x="450" y="118" text-anchor="middle" font-size="28" font-weight="bold" fill="#1e40af" letter-spacing="3">
+    WHP-ADM-GW-P26-001
+  </text>
+
+  <!-- Arrows and labels -->
+  <!-- Arrow WHP -->
+  <line x1="138" y1="140" x2="138" y2="165" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="130" y1="158" x2="138" y2="165" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="146" y1="158" x2="138" y2="165" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Arrow ADM -->
+  <line x1="244" y1="140" x2="244" y2="165" stroke="#a855f7" stroke-width="2"/>
+  <line x1="236" y1="158" x2="244" y2="165" stroke="#a855f7" stroke-width="2"/>
+  <line x1="252" y1="158" x2="244" y2="165" stroke="#a855f7" stroke-width="2"/>
+
+  <!-- Arrow GW -->
+  <line x1="364" y1="140" x2="364" y2="165" stroke="#10b981" stroke-width="2"/>
+  <line x1="356" y1="158" x2="364" y2="165" stroke="#10b981" stroke-width="2"/>
+  <line x1="372" y1="158" x2="364" y2="165" stroke="#10b981" stroke-width="2"/>
+
+  <!-- Arrow P -->
+  <line x1="511" y1="140" x2="511" y2="165" stroke="#f59e0b" stroke-width="2"/>
+  <line x1="503" y1="158" x2="511" y2="165" stroke="#f59e0b" stroke-width="2"/>
+  <line x1="519" y1="158" x2="511" y2="165" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Arrow 26 -->
+  <line x1="599" y1="140" x2="599" y2="165" stroke="#ef4444" stroke-width="2"/>
+  <line x1="591" y1="158" x2="599" y2="165" stroke="#ef4444" stroke-width="2"/>
+  <line x1="607" y1="158" x2="599" y2="165" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Arrow 001 -->
+  <line x1="754" y1="140" x2="754" y2="165" stroke="#22d3ee" stroke-width="2"/>
+  <line x1="746" y1="158" x2="754" y2="165" stroke="#22d3ee" stroke-width="2"/>
+  <line x1="762" y1="158" x2="754" y2="165" stroke="#22d3ee" stroke-width="2"/>
+
+  <!-- Annotation boxes -->
+  <!-- WHP -->
+  <rect x="65" y="170" width="146" height="70" rx="8" fill="url(#whp)" filter="url(#shadow)"/>
+  <text x="138" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">WHP</text>
+  <text x="138" y="215" text-anchor="middle" font-size="9" fill="#bfdbfe">White House</text>
+  <text x="138" y="228" text-anchor="middle" font-size="9" fill="#bfdbfe">Premiere</text>
+
+  <!-- ADM -->
+  <rect x="217" y="170" width="54" height="70" rx="8" fill="url(#adm)" filter="url(#shadow)"/>
+  <text x="244" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">ADM</text>
+  <text x="244" y="215" text-anchor="middle" font-size="9" fill="#ddd6fe">Admin</text>
+
+  <!-- INITIALS -->
+  <rect x="277" y="170" width="174" height="70" rx="8" fill="url(#ini)" filter="url(#shadow)"/>
+  <text x="364" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">INISIAL</text>
+  <text x="364" y="215" text-anchor="middle" font-size="9" fill="#a7f3d0">2 huruf awal nama</text>
+  <text x="364" y="228" text-anchor="middle" font-size="9" fill="#a7f3d0">Contoh: GW (Giescha Wiwenar)</text>
+
+  <!-- GENDER -->
+  <rect x="457" y="170" width="108" height="70" rx="8" fill="url(#jk)" filter="url(#shadow)"/>
+  <text x="511" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">JK</text>
+  <text x="511" y="215" text-anchor="middle" font-size="9" fill="#fde68a">Jenis Kelamin</text>
+  <text x="511" y="228" text-anchor="middle" font-size="9" fill="#fde68a">P / L</text>
+
+  <!-- YEAR -->
+  <rect x="571" y="170" width="56" height="70" rx="8" fill="url(#thn)" filter="url(#shadow)"/>
+  <text x="599" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">26</text>
+  <text x="599" y="215" text-anchor="middle" font-size="9" fill="#fecaca">Tahun</text>
+
+  <!-- SEQUENCE -->
+  <rect x="633" y="170" width="242" height="70" rx="8" fill="url(#seq)" filter="url(#shadow)"/>
+  <text x="754" y="195" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">URUTAN</text>
+  <text x="754" y="215" text-anchor="middle" font-size="9" fill="#cffafe">Nomor urut 3 digit</text>
+  <text x="754" y="228" text-anchor="middle" font-size="9" fill="#cffafe">001, 002, ..., 999</text>
+
+  <!-- Legend / Example Section -->
+  <rect x="65" y="265" width="770" height="110" rx="10" fill="#fff" filter="url(#shadow)"/>
+
+  <text x="85" y="292" font-size="12" font-weight="bold" fill="#374151" font-family="'Segoe UI', Arial, sans-serif">
+    Contoh Penerapan:
+  </text>
+
+  <!-- Example row 1 -->
+  <text x="85" y="318" font-size="11" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Nama Admin:
+  </text>
+  <text x="200" y="318" font-size="11" font-weight="bold" fill="#111827" font-family="'Segoe UI', Arial, sans-serif">
+    Giescha Wiwenar
+  </text>
+
+  <!-- Example row 2 -->
+  <text x="85" y="340" font-size="11" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Jenis Kelamin:
+  </text>
+  <text x="200" y="340" font-size="11" font-weight="bold" fill="#111827" font-family="'Segoe UI', Arial, sans-serif">
+    Perempuan (P)
+  </text>
+
+  <!-- Example row 3 -->
+  <text x="85" y="362" font-size="11" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Tahun Daftar:
+  </text>
+  <text x="200" y="362" font-size="11" font-weight="bold" fill="#111827" font-family="'Segoe UI', Arial, sans-serif">
+    2026
+  </text>
+
+  <!-- Result box in legend -->
+  <rect x="420" y="283" width="395" height="78" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="435" y="306" font-size="10" font-weight="bold" fill="#1e40af" font-family="'Segoe UI', Arial, sans-serif">
+    Kode yang dihasilkan:
+  </text>
+  <text x="435" y="335" font-size="22" font-weight="bold" fill="#1e40af" letter-spacing="2">
+    WHP-ADM-GW-P26-001
+  </text>
+  <text x="435" y="352" font-size="9" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Format pengkodean otomatis oleh sistem saat admin dibuat
+  </text>
+
+  <!-- Footer note -->
+  <rect x="65" y="400" width="770" height="45" rx="8" fill="#1e3a5f" opacity="0.05"/>
+  <text x="450" y="420" text-anchor="middle" font-size="10" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Sistem akan mencari nomor urut terakhir dengan pola yang sama, lalu increment +1
+  </text>
+  <text x="450" y="436" text-anchor="middle" font-size="10" fill="#6b7280" font-family="'Segoe UI', Arial, sans-serif">
+    Jika belum ada, nomor urut dimulai dari 001
+  </text>
+
+</svg>
