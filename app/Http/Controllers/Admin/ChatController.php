@@ -92,6 +92,15 @@ class ChatController extends Controller
         return response()->json($messages);
     }
 
+    public function destroy($id)
+    {
+        $conversation = Conversation::findOrFail($id);
+        $conversation->messages()->delete();
+        $conversation->delete();
+
+        return redirect()->route('admin.chat.index')->with('success', 'Percakapan berhasil dihapus.');
+    }
+
     public function unreadCount()
     {
         $count = Message::where('sender_type', 'user')->whereNull('read_at')->count();

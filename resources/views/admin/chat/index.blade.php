@@ -48,10 +48,21 @@
                         <div class="text-xs text-gray-400">{{ $conv->last_message_at?->diffForHumans() ?? $conv->created_at->diffForHumans() }}</div>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <a href="{{ route('admin.chat.show', $conv->id) }}"
-                           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
-                            <i class="fas fa-reply mr-2"></i> Balas
-                        </a>
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{{ route('admin.chat.show', $conv->id) }}"
+                               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+                                <i class="fas fa-reply mr-2"></i> Balas
+                            </a>
+                            <form action="{{ route('admin.chat.destroy', $conv->id) }}" method="POST" class="inline"
+                                  onsubmit="return confirm('Yakin ingin menghapus percakapan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition">
+                                    <i class="fas fa-trash mr-2"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty

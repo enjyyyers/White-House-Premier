@@ -139,6 +139,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/chat/{id}/close', [AdminChatController::class, 'close'])->name('chat.close');
     Route::get('/chat/{id}/fetch', [AdminChatController::class, 'fetchMessages'])->name('chat.fetch');
     Route::get('/chat/unread/count', [AdminChatController::class, 'unreadCount'])->name('chat.unread');
+    Route::delete('/chat/{id}', [AdminChatController::class, 'destroy'])->name('chat.destroy');
 
     // Sales & Users (Menu Transaksi Admin dengan Tab & Analitik)
     // 1. Halaman Utama Tabel Transaksi Admin
