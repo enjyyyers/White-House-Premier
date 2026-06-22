@@ -7,7 +7,7 @@
 <body>
     <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
         <h2>Selesaikan Pembayaran Anda</h2>
-        <p>Total Tagihan: <strong style="color: #2b6cb0;">Rp 310.000.000</strong></p>
+        <p>Total Tagihan: <strong style="color: #2b6cb0;">Rp {{ number_format($transaction->total_payable, 0, ',', '.') }}</strong></p>
         <button id="pay-button" style="padding: 12px 24px; font-size: 16px; background-color: #2b6cb0; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold;">
             Bayar Sekarang
         </button>

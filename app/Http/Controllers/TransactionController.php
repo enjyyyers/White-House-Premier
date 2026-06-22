@@ -42,17 +42,19 @@ class TransactionController extends Controller
 
         if ($method === 'booking') {
             $price_raw = config('payment.booking_fee');
+            $ipl_base = $price_raw;
         } elseif ($method === 'dp') {
             $price_raw = $price_base * config('payment.dp_rate');
+            $ipl_base = $price_base;
         } else {
             $price_raw = $price_base;
+            $ipl_base = $price_base;
         }
 
-        $ipl = $property->ipl_cost > 0 ? $property->ipl_cost : ($price_raw * config('payment.ipl_rate'));
-        $tax = $property->tax_cost > 0 ? $property->tax_cost : ($price_raw * config('payment.tax_rate'));
-        $admin = $property->admin_cost > 0 ? $property->admin_cost : config('payment.admin_fee');
+        $ipl = $property->ipl_cost > 0 ? $property->ipl_cost : ($ipl_base * config('payment.ipl_rate'));
+        $tax = $property->tax_cost > 0 ? $property->tax_cost : ($ipl_base * config('payment.tax_rate'));
 
-        $grossAmountOriginal = $price_raw + $ipl + $tax + $admin;
+        $grossAmountOriginal = $price_raw + $ipl + $tax;
 
         $installmentData = null;
         $installmentTotal = $grossAmountOriginal;
@@ -73,7 +75,6 @@ class TransactionController extends Controller
         $property->price_raw = $price_raw;
         $property->ipl = $ipl;
         $property->tax = $tax;
-        $property->admin = $admin;
 
         $project = [
             'id'        => $property->id,
@@ -81,7 +82,6 @@ class TransactionController extends Controller
             'price_raw' => $price_raw,
             'ipl'       => $ipl,
             'tax'       => $tax,
-            'admin'     => $admin,
         ];
 
         $total_booking = $grossAmountOriginal;
@@ -97,7 +97,7 @@ class TransactionController extends Controller
                 'gross_amount'             => $grossAmountOriginal,
                 'total_payable'            => $grossAmountOriginal,
                 'amount_paid'              => 0,
-                'admin_fee'                => $admin,
+                'admin_fee'                => 0,
                 'payment_status'           => 'pending',
                 'payment_type'             => $method,
                 'installment_plan'         => $installmentPlan,

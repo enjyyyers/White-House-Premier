@@ -72,12 +72,12 @@
                             </div>
 
                             <div class="flex justify-between text-sm text-gray-600">
-                                <span>Biaya IPL (20% dari Pokok):</span>
+                                <span>Biaya IPL @if($transaction->payment_type === 'booking')(20% dari Booking Fee)@else(20% dari Harga Properti)@endif:</span>
                                 <span class="text-gray-800">+ Rp {{ number_format($project['ipl'] ?? 0, 0, ',', '.') }}</span>
                             </div>
 
                             <div class="flex justify-between text-sm text-gray-600">
-                                <span>Pajak PPN (2% dari Pokok):</span>
+                                <span>Pajak PPN @if($transaction->payment_type === 'booking')(2% dari Booking Fee)@else(2% dari Harga Properti)@endif:</span>
                                 <span class="text-gray-800">+ Rp {{ number_format($project['tax'] ?? 0, 0, ',', '.') }}</span>
                             </div>
 
@@ -97,6 +97,12 @@
                                 <span>Total Tagihan:</span>
                                 <span class="text-success">Rp {{ number_format($total_booking, 0, ',', '.') }}</span>
                             </div>
+                            @if($transaction->payment_type === 'booking')
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>Sisa Pembayaran (setelah booking):</span>
+                                <span class="font-medium text-gray-700">Rp {{ number_format($property->price - config('payment.booking_fee'), 0, ',', '.') }}</span>
+                            </div>
+                            @endif
                             @endif
                         </div>
 

@@ -85,17 +85,22 @@
 
             @php
                 $tipe = $transaction->payment_type ?? 'booking';
+                $propPrice = $transaction->property_price ?? 0;
+
                 if ($tipe === 'booking') {
-                    $nilai_pokok = 10000000;
+                    $nilai_pokok = config('payment.booking_fee');
+                    $ipl_base = $nilai_pokok;
                 } elseif ($tipe === 'dp') {
-                    $nilai_pokok = $transaction->property_price * 0.20;
+                    $nilai_pokok = $propPrice * config('payment.dp_rate');
+                    $ipl_base = $propPrice;
                 } else {
-                    $nilai_pokok = $transaction->property_price;
+                    $nilai_pokok = $propPrice;
+                    $ipl_base = $propPrice;
                 }
 
-                // Hitung IPL 20% dan PPN 2% dari nilai pokok
-                $ipl_calculated = $nilai_pokok * 0.20;
-                $tax_calculated = $nilai_pokok * 0.02;
+                // Hitung IPL 20% dan PPN 2% sesuai base per metode
+                $ipl_calculated = $ipl_base * config('payment.ipl_rate');
+                $tax_calculated = $ipl_base * config('payment.tax_rate');
             @endphp
 
             <tr class="item">
@@ -104,12 +109,12 @@
             </tr>
 
             <tr class="item">
-                <td style="color: #555; padding-left: 15px;">Biaya Pengelolaan Lingkungan (IPL 20% dari Pokok)</td>
+                <td style="color: #555; padding-left: 15px;">Biaya Pengelolaan Lingkungan (IPL 20% @if($tipe === 'booking')dari Booking Fee @else dari Harga Properti @endif)</td>
                 <td style="color: #dd6b20;">+ Rp {{ number_format($ipl_calculated, 0, ',', '.') }}</td>
             </tr>
 
             <tr class="item">
-                <td style="color: #555; padding-left: 15px;">Pajak Pertambahan Nilai (PPN 2% dari Pokok)</td>
+                <td style="color: #555; padding-left: 15px;">Pajak Pertambahan Nilai (PPN 2% @if($tipe === 'booking')dari Booking Fee @else dari Harga Properti @endif)</td>
                 <td style="color: #dd6b20;">+ Rp {{ number_format($tax_calculated, 0, ',', '.') }}</td>
             </tr>
 

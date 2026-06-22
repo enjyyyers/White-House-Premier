@@ -50,17 +50,21 @@ class TransactionController extends Controller
 
         // LOGIKA MATEMATIKA: Memecah komponen harga agar sinkron dengan Kasir & Invoice PDF
         $tipe = $transaction->payment_type ?? 'booking';
+        $propPrice = $transaction->property_price ?? ($property->price ?? 0);
 
         if ($tipe === 'booking') {
             $price_raw = config('payment.booking_fee');
+            $ipl_base = $price_raw;
         } elseif ($tipe === 'dp') {
-            $price_raw = ($transaction->property_price ?? ($property->price ?? 0)) * config('payment.dp_rate');
+            $price_raw = $propPrice * config('payment.dp_rate');
+            $ipl_base = $propPrice;
         } else {
-            $price_raw = $transaction->property_price ?? ($property->price ?? 0);
+            $price_raw = $propPrice;
+            $ipl_base = $propPrice;
         }
 
-        $ipl = $price_raw * config('payment.ipl_rate');
-        $tax = $price_raw * config('payment.tax_rate');
+        $ipl = $ipl_base * config('payment.ipl_rate');
+        $tax = $ipl_base * config('payment.tax_rate');
 
         $installmentOptions = \App\Services\InstallmentService::plans();
 
@@ -89,16 +93,21 @@ class TransactionController extends Controller
         $newType   = $request->payment_type;
 
         // Hitung ulang gross_amount & total_payable jika Admin mengganti mekanisme pembayaran
+        $propPrice = $transaction->property_price ?? ($property->price ?? 0);
+
         if ($newType === 'booking') {
             $price_raw = config('payment.booking_fee');
+            $ipl_base = $price_raw;
         } elseif ($newType === 'dp') {
-            $price_raw = ($transaction->property_price ?? ($property->price ?? 0)) * config('payment.dp_rate');
+            $price_raw = $propPrice * config('payment.dp_rate');
+            $ipl_base = $propPrice;
         } else {
-            $price_raw = $transaction->property_price ?? ($property->price ?? 0);
+            $price_raw = $propPrice;
+            $ipl_base = $propPrice;
         }
 
-        $ipl_calculated = $price_raw * config('payment.ipl_rate');
-        $tax_calculated = $price_raw * config('payment.tax_rate');
+        $ipl_calculated = $ipl_base * config('payment.ipl_rate');
+        $tax_calculated = $ipl_base * config('payment.tax_rate');
         $total_baru = $price_raw + $ipl_calculated + $tax_calculated;
 
         $updateData = [

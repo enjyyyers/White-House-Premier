@@ -106,11 +106,11 @@
                         <span class="font-semibold text-slate-800">Rp {{ number_format($price_raw, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-slate-500">Biaya Lingkungan & Pengelolaan (IPL 20%)</span>
+                        <span class="text-slate-500">Biaya Lingkungan & Pengelolaan (IPL 20% @if($transaction->payment_type === 'booking')dari Booking Fee @else dari Harga Properti @endif)</span>
                         <span class="font-medium text-amber-600">+ Rp {{ number_format($ipl, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between items-center text-sm pb-3 border-b border-slate-100">
-                        <span class="text-slate-500">Pajak Pertambahan Nilai (PPN 2%)</span>
+                        <span class="text-slate-500">Pajak Pertambahan Nilai (PPN 2% @if($transaction->payment_type === 'booking')dari Booking Fee @else dari Harga Properti @endif)</span>
                         <span class="font-medium text-amber-600">+ Rp {{ number_format($tax, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between items-center pt-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
