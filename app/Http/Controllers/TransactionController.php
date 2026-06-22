@@ -179,14 +179,19 @@ class TransactionController extends Controller
                 if ($transactionStatus === 'capture' && $fraudStatus !== 'accept') {
                     return response()->json(['status' => 'fraud detected']);
                 }
+
+                $alreadyPaid = $installment->payment_status === 'success';
+
                 $installment->update([
                     'payment_status' => 'success',
                     'paid_amount' => $installment->amount,
                     'paid_at' => now(),
                 ]);
 
-                $transaction->increment('paid_installments');
-                $transaction->increment('amount_paid', $installment->amount);
+                if (!$alreadyPaid) {
+                    $transaction->increment('paid_installments');
+                    $transaction->increment('amount_paid', $installment->amount);
+                }
 
                 if ($transaction->paid_installments >= $transaction->installment_count) {
                     $transaction->update(['payment_status' => 'success']);
@@ -219,7 +224,10 @@ class TransactionController extends Controller
                     'amount_paid' => $transaction->gross_amount,
                 ]);
                 if ($transaction->is_installment && $transaction->installment_count > 1) {
-                    $firstInstallment = $transaction->installments()->where('installment_number', 1)->first();
+                    $firstInstallment = $transaction->installments()
+                        ->where('installment_number', 1)
+                        ->where('payment_status', '!=', 'success')
+                        ->first();
                     if ($firstInstallment) {
                         $firstInstallment->update([
                             'payment_status' => 'success',
@@ -236,7 +244,10 @@ class TransactionController extends Controller
                 'amount_paid' => $transaction->gross_amount,
             ]);
             if ($transaction->is_installment && $transaction->installment_count > 1) {
-                $firstInstallment = $transaction->installments()->where('installment_number', 1)->first();
+                $firstInstallment = $transaction->installments()
+                    ->where('installment_number', 1)
+                    ->where('payment_status', '!=', 'success')
+                    ->first();
                 if ($firstInstallment) {
                     $firstInstallment->update([
                         'payment_status' => 'success',
@@ -281,20 +292,42 @@ class TransactionController extends Controller
     }
 
     if ($transaction->is_installment && $transaction->installment_count > 1) {
-        $firstInstallment = $transaction->installments()->where('installment_number', 1)->first();
-        if ($firstInstallment && $firstInstallment->payment_status !== 'success') {
-            $firstInstallment->update([
+        $installmentId = request('installment_id');
+        $installment = null;
+
+        if ($installmentId) {
+            $installment = Installment::where('id', $installmentId)
+                ->where('transaction_id', $transaction->id)
+                ->where('payment_status', '!=', 'success')
+                ->first();
+        } else {
+            $installment = $transaction->installments()
+                ->where('payment_status', '!=', 'success')
+                ->oldest('installment_number')
+                ->first();
+        }
+
+        if ($installment) {
+            $installment->update([
                 'payment_status' => 'success',
-                'paid_amount' => $firstInstallment->amount,
+                'paid_amount' => $installment->amount,
                 'paid_at' => now(),
             ]);
             $transaction->increment('paid_installments');
-            $transaction->increment('amount_paid', $firstInstallment->amount);
+            $transaction->increment('amount_paid', $installment->amount);
+
+            if ($transaction->paid_installments >= $transaction->installment_count) {
+                $transaction->update(['payment_status' => 'success']);
+                $property = \App\Models\Property::find($transaction->property_id);
+                if ($property && $property->status !== 'sold') {
+                    $property->update(['status' => 'sold']);
+                }
+            }
         }
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Cicilan pertama berhasil dikonfirmasi!'
+            'message' => 'Pembayaran cicilan berhasil dikonfirmasi!'
         ]);
     }
 

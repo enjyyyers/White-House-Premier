@@ -67,8 +67,24 @@
         }
         window.snap.pay(token, {
             onSuccess: function(result) {
-                alert("Pembayaran cicilan berhasil!");
-                window.location.href = "{{ route('dashboard') }}";
+                fetch("{{ url('/transaction/set-success') }}/{{ $installment->transaction->id }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({ installment_id: {{ $installment->id }} })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Pembayaran cicilan berhasil!");
+                    window.location.href = "{{ route('dashboard') }}";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    window.location.href = "{{ route('dashboard') }}";
+                });
             },
             onPending: function(result) {
                 alert("Pembayaran cicilan sedang diproses.");
