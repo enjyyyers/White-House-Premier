@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\Property;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,8 @@ class PageController extends Controller
 
     public function project()
     {
-        $projects = Property::all();
-        return view('pages.project', compact('projects'));
+        $clusters = Category::with('properties')->get();
+        return view('pages.project', compact('clusters'));
     }
 
     public function projectDetail($id)
