@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Tipe & Kategori')
-@section('subtitle', 'Kelola kategori induk dan spesifikasi tipe bangunan.')
+@section('title', 'Tipe & Cluster')
+@section('subtitle', 'Kelola cluster induk dan spesifikasi tipe bangunan.')
 
 @section('content')
 <div class="p-6">
@@ -18,14 +18,14 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-4 border-b border-slate-100 bg-slate-50/50">
                     <h3 class="font-bold text-slate-700 uppercase text-xs tracking-wider">
-                        <i class="fas fa-tags mr-2 text-blue-500"></i> Master Kategori
+                        <i class="fas fa-tags mr-2 text-blue-500"></i> Master Cluster
                     </h3>
                 </div>
 
                 <form action="{{ route('admin.categories.store') }}" method="POST" class="p-4 border-b border-slate-50 bg-slate-50/30">
                     @csrf
                     <div class="flex gap-2">
-                        <input type="text" name="name" placeholder="Nama Kategori..." required
+                        <input type="text" name="name" placeholder="Nama Cluster..." required
                             class="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
                         <button type="submit" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-700">
                             <i class="fas fa-plus"></i>
@@ -41,14 +41,14 @@
                             <td class="p-4 text-right">
                                 <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="inline">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="text-slate-300 hover:text-red-500 transition" onclick="return confirm('Hapus kategori?')">
+                                    <button type="submit" class="text-slate-300 hover:text-red-500 transition" onclick="return confirm('Hapus cluster?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                         @empty
-                        <tr><td class="p-4 text-center text-slate-400 italic">Belum ada kategori</td></tr>
+                        <tr><td class="p-4 text-center text-slate-400 italic">Belum ada cluster</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -107,7 +107,7 @@
 
             <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-center text-blue-700 text-xs">
                 <i class="fas fa-info-circle mr-3 text-lg"></i>
-                <p>Data <b>Tipe</b> dan <b>Kategori</b> akan muncul sebagai pilihan saat Anda menambah atau mengedit unit di Manajemen Properti.</p>
+                <p>Data <b>Tipe</b> dan <b>Cluster</b> akan muncul sebagai pilihan saat Anda menambah atau mengedit unit di Manajemen Properti.</p>
             </div>
         </div>
 

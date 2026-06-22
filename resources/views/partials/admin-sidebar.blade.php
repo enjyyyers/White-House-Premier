@@ -35,7 +35,7 @@
                 <a href="{{ route('admin.categories.index') }}"
                    class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('admin.categories.*') ? 'bg-blue-600/10 text-blue-400 font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' }}">
                     <i class="fas fa-th-large w-4 text-center text-xs"></i>
-                    Tipe & Kategori
+                    Tipe & Cluster
                 </a>
             </div>
         </div>

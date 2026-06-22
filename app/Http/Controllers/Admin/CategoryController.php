@@ -34,7 +34,7 @@ class CategoryController extends Controller
         'slug' => Str::slug($request->name)
     ]);
 
-    return back()->with('success', 'Kategori berhasil ditambahkan!');
+        return back()->with('success', 'Cluster berhasil ditambahkan!');
     }
 
     public function storeType(Request $request)
@@ -84,6 +84,6 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return back()->with('success', 'Kategori berhasil dihapus!');
+        return back()->with('success', 'Cluster berhasil dihapus!');
     }
 }

@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Buat Kategori Properti
+        // 2. Buat Cluster Properti
         $category = Category::updateOrCreate(
             ['slug' => 'rumah-mewah'],
             [

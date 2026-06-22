@@ -59,9 +59,9 @@
                 </div>
 
                 <div class="space-y-2">
-                    <label class="text-sm font-semibold text-slate-700">Kategori Induk</label>
+                    <label class="text-sm font-semibold text-slate-700">Cluster Induk</label>
                     <select name="category_id" class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-400" required>
-                        <option value="">-- Pilih Kategori --</option>
+                        <option value="">-- Pilih Cluster --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
