@@ -30,7 +30,9 @@ class PropertyController extends Controller
             'location' => 'required',
             'price' => 'required|numeric',
             'category_id' => 'required',
-            'google_maps_url' => 'nullable|url', // Ditambahkan validasi URL maps
+            'type_id' => 'required',
+            'description' => 'required',
+            'google_maps_url' => 'nullable|url',
             'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'image_living_room' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_bathroom' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -87,7 +89,9 @@ class PropertyController extends Controller
             'location' => 'required',
             'price' => 'required|numeric',
             'category_id' => 'required',
-            'google_maps_url' => 'nullable|url', // Ditambahkan validasi URL maps
+            'type_id' => 'required',
+            'description' => 'required',
+            'google_maps_url' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_living_room' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_bathroom' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',

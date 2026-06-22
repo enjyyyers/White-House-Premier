@@ -100,8 +100,11 @@
             </div>
 
             <div class="mt-6 space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Deskripsi</label>
-                <textarea name="description" rows="4" class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tuliskan detail unit di sini...">{{ old('description', $property->description) }}</textarea>
+                <label class="text-sm font-semibold text-slate-700">Deskripsi <span class="text-red-500">*</span></label>
+                <textarea name="description" rows="4" class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 @error('description') border-red-500 @enderror" placeholder="Tuliskan detail unit di sini...">{{ old('description', $property->description) }}</textarea>
+                @error('description')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-100">
