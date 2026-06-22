@@ -26,7 +26,8 @@ class PageController extends Controller
     public function projectDetail($id)
     {
         $project = Property::findOrFail($id);
-        return view('pages.project-detail', compact('project'));
+        $isSold = $project->status === 'sold';
+        return view('pages.project-detail', compact('project', 'isSold'));
     }
 
     public function contact()

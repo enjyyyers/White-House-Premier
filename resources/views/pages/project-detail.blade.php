@@ -161,7 +161,6 @@
                     </div>
                     @php
     $savedDetail = Auth::check() ? Auth::user()->hasSavedProperty($project->id) : false;
-    $isSold = ($project->status ?? '') === 'sold';
 @endphp
                     <div class="flex space-x-2 mt-2">
                         @auth
