@@ -30,6 +30,11 @@ class TransactionController extends Controller
         ]);
 
         $property = \App\Models\Property::findOrFail($id);
+
+        if ($property->status === 'sold') {
+            return redirect()->back()->with('error', 'Unit ini sudah terjual dan tidak dapat dipesan');
+        }
+
         $price_base = $property->price > 0 ? $property->price : config('payment.default_price');
 
         $method = $request->get('method', 'booking');

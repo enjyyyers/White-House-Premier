@@ -29,7 +29,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700">Nama Properti</label>
-                    <input type="text" name="name" value="{{ old('name', $property->name) }}" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Contoh: Unit Kavling A1" required>
+                    <input type="text" name="name" value="{{ old('name', $property->name) }}" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none @error('name') border-red-500 @enderror" placeholder="Contoh: Unit Kavling A1" required>
+                    @error('name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                <div class="space-y-2">

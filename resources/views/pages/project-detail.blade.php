@@ -21,6 +21,12 @@
 
         <div class="lg:col-span-2 relative group overflow-hidden bg-slate-100 rounded-2xl h-[400px] md:h-[500px] flex items-center justify-center border border-slate-200 shadow-sm">
 
+            @if($isSold)
+            <div class="absolute top-6 left-6 z-20">
+                <span class="bg-red-600 text-white font-black text-sm px-5 py-2 rounded-lg shadow-lg tracking-wider">SOLD OUT</span>
+            </div>
+            @endif
+
             <img src="{{ $project->image ? asset('uploads/properties/' . $project->image) : asset('images/no-image.svg') }}"
                  x-show="fotoAktif === 0"
                  alt="{{ $project->name }}"
@@ -153,7 +159,10 @@
                             <span>{{ $project->location ?? $project['location'] }}</span>
                         </div>
                     </div>
-                    @php $savedDetail = Auth::check() ? Auth::user()->hasSavedProperty($project->id) : false; @endphp
+                    @php
+    $savedDetail = Auth::check() ? Auth::user()->hasSavedProperty($project->id) : false;
+    $isSold = ($project->status ?? '') === 'sold';
+@endphp
                     <div class="flex space-x-2 mt-2">
                         @auth
                         <button onclick="toggleFav({{ $project->id }}, this)" class="w-12 h-12 border border-gray-300 rounded-full flex items-center justify-center transition-colors {{ $savedDetail ? 'text-red-500 border-red-500' : 'text-gray-600 hover:text-red-500 hover:border-red-500' }}">
@@ -389,10 +398,16 @@
             </div>
 
             <div class="space-y-3">
+                @if($isSold)
+                <div class="w-full bg-red-50 border border-red-200 text-red-600 font-bold py-4 rounded-xl flex items-center justify-center text-sm">
+                    <i class="fas fa-times-circle mr-2"></i> Unit ini sudah terjual
+                </div>
+                @else
                 <a :href="checkoutUrl"
                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-200 flex items-center justify-center text-sm">
                     <i class="fas fa-money-check-alt mr-2"></i> Lanjutkan Pembayaran
                 </a>
+                @endif
 
                 <button onclick="document.getElementById('modalJadwal').classList.remove('hidden')" type="button"
                         class="w-full bg-white border-2 border-gray-200 text-gray-600 hover:bg-gray-50 font-bold py-3 rounded-xl transition-all flex items-center justify-center text-sm cursor-pointer">

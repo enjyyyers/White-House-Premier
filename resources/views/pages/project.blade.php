@@ -24,21 +24,30 @@
 
     @forelse($clusters as $cluster)
         @if($cluster->properties->count() > 0)
-        <div>
+        @php $total = $cluster->properties->count(); $visible = min(3, $total); @endphp
+        <div x-data="{ expanded: false }">
             <div class="flex items-center gap-3 mb-6">
                 <h2 class="font-display text-2xl font-bold text-slate-800">{{ $cluster->name }}</h2>
-                <span class="px-3 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-full">{{ $cluster->properties->count() }} Unit</span>
+                <span class="px-3 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-full">{{ $total }} Unit</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($cluster->properties as $item)
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 group relative">
+            @foreach($cluster->properties as $idx => $item)
+                @php $isSold = ($item->status ?? '') === 'sold'; @endphp
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 group relative {{ $isSold ? 'opacity-60' : '' }}"
+                     @if($idx >= 3) x-show="expanded" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-cloak @endif>
 
                     <div class="relative h-60 w-full bg-slate-100 overflow-hidden">
                         <img src="{{ $item->image ? asset('uploads/properties/' . $item->image) : asset('images/no-image.svg') }}"
                              alt="{{ $item->name ?? 'Foto Properti' }}"
                              class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                              onerror="this.onerror=null; this.src='{{ asset('images/no-image.svg') }}'">
+
+                        @if($isSold)
+                        <div class="absolute inset-0 z-20 flex items-center justify-center">
+                            <span class="bg-red-600 text-white font-black text-sm px-5 py-2 rounded-lg shadow-lg tracking-wider">SOLD OUT</span>
+                        </div>
+                        @endif
 
                         <div class="absolute top-4 right-4 z-10 flex flex-col gap-2">
                             <button onclick="shareProperty('{{ str_replace("'", "\'", $item->name) }}', '{{ route('project.show', $item->id) }}')"
@@ -90,15 +99,30 @@
                             <div class="font-display font-extrabold text-primary-600 text-base">
                                 Rp {{ number_format($item->price ?? 0, 0, ',', '.') }}
                             </div>
+                            @if($isSold)
+                            <span class="text-red-400 font-bold text-xs">Tidak Tersedia</span>
+                            @else
                             <a href="{{ route('project.show', $item->id) }}" class="text-gold-600 hover:text-gold-700 font-bold text-xs flex items-center gap-1 transition-all">
                                 Detail <i class="fas fa-arrow-right text-[10px]"></i>
                             </a>
+                            @endif
                         </div>
                     </div>
 
                 </div>
             @endforeach
             </div>
+
+            @if($total > 3)
+            <div class="mt-6 text-center">
+                <button @click="expanded = !expanded"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-primary-200 text-primary-700 rounded-full font-semibold text-sm hover:bg-primary-50 transition-all shadow-sm">
+                    <span x-show="!expanded">Lihat Semua Unit ({{ $total }})</span>
+                    <span x-show="expanded">Tampilkan Lebih Sedikit</span>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{ 'rotate-180': expanded }"></i>
+                </button>
+            </div>
+            @endif
         </div>
         @endif
     @empty

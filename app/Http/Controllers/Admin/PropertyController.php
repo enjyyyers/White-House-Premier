@@ -46,9 +46,6 @@ class PropertyController extends Controller
             'google_maps_url'
         ]);
 
-        // Auto-generate slug dari nama
-        $data['slug'] = \Illuminate\Support\Str::slug($request->name);
-
         // Proses upload masing-masing foto dengan nama aman (hash)
         $photoFields = ['image', 'image_living_room', 'image_bathroom', 'image_exterior'];
         foreach ($photoFields as $field) {
@@ -59,6 +56,12 @@ class PropertyController extends Controller
                 $file->move(public_path('uploads/properties'), $filename);
                 $data[$field] = $filename;
             }
+        }
+
+        // Auto-generate slug dari nama & cek duplikasi
+        $data['slug'] = \Illuminate\Support\Str::slug($request->name);
+        if (Property::where('slug', $data['slug'])->exists()) {
+            return back()->withErrors(['name' => 'Properti dengan nama ini sudah ada, gunakan nama yang berbeda.'])->withInput();
         }
 
         Property::create($data);
@@ -105,8 +108,11 @@ class PropertyController extends Controller
             'google_maps_url'
         ]);
 
-        // Auto-generate slug dari nama
+        // Auto-generate slug dari nama & cek duplikasi
         $data['slug'] = \Illuminate\Support\Str::slug($request->name);
+        if (Property::where('slug', $data['slug'])->where('id', '!=', $id)->exists()) {
+            return back()->withErrors(['name' => 'Properti dengan nama ini sudah ada, gunakan nama yang berbeda.'])->withInput();
+        }
 
         // Proses upload masing-masing foto dengan nama aman (hash)
         $photoFields = ['image', 'image_living_room', 'image_bathroom', 'image_exterior'];
