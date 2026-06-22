@@ -43,7 +43,7 @@
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Booking Sukses</p>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Booking Aktif</p>
                     <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ $activeBookings }}</h3>
                 </div>
                 <div class="p-3 rounded-xl bg-green-50 text-green-600">
@@ -163,6 +163,10 @@
                                             <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 uppercase tracking-wider" style="padding: 6px 12px; border-radius: 5px;">
                                                 SUCCESS
                                             </span>
+                                        @elseif($item->payment_status == 'booking_paid')
+                                            <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 uppercase tracking-wider" style="padding: 6px 12px; border-radius: 5px;">
+                                                BOOKING PAID
+                                            </span>
                                         @elseif($item->payment_status == 'pending')
                                             <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-800 uppercase tracking-wider" style="padding: 6px 12px; border-radius: 5px;">
                                                 PENDING
@@ -187,7 +191,14 @@
                                         @endif
                                     </td>
                                     <td class="p-4 text-center">
-                                        @if(($item->is_installment ?? false) && ($item->paid_installments ?? 0) < ($item->installment_count ?? 1))
+                                        @if($item->payment_status == 'booking_paid')
+                                            <a href="{{ route('transaction.pelunasan', $item->id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+                                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                                </svg>
+                                                Lanjutkan Pelunasan
+                                            </a>
+                                        @elseif(($item->is_installment ?? false) && ($item->paid_installments ?? 0) < ($item->installment_count ?? 1))
                                             @php $nextInst = $item->nextDueInstallment; @endphp
                                             @if($nextInst && $nextInst->payment_status === 'pending')
                                             <a href="{{ route('installment.pay', $nextInst->id) }}" class="text-purple-600 hover:underline font-semibold text-xs">

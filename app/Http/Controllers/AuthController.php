@@ -282,7 +282,7 @@ class AuthController extends Controller
         }
 
         $transactions = \App\Models\Transaction::where('user_id', $user->id)
-                            ->whereIn('payment_status', ['success', 'pending'])
+                            ->whereIn('payment_status', ['success', 'pending', 'booking_paid'])
                             ->with('property')
                             ->latest()
                             ->limit(5)
@@ -291,7 +291,7 @@ class AuthController extends Controller
         $visitSchedules = $user->visitSchedules()->latest()->limit(3)->get();
 
         $totalTransactions = \App\Models\Transaction::where('user_id', $user->id)->count();
-        $activeBookings = \App\Models\Transaction::where('user_id', $user->id)->where('payment_status', 'success')->count();
+        $activeBookings = \App\Models\Transaction::where('user_id', $user->id)->whereIn('payment_status', ['success', 'booking_paid'])->count();
         $activeInquiriesCount = Inquiry::where('email', $user->email)->whereNull('reply')->count();
         $savedProperties = $user->savedProperties()->latest()->limit(3)->get();
 

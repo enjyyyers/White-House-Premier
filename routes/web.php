@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/invoice/{id}', [TransactionController::class, 'invoice'])->name('transaction.invoice');
     Route::get('/transaction/download/{id}', [TransactionController::class, 'downloadInvoice'])->name('transaction.download');
     Route::post('/transaction/set-success/{id}', [TransactionController::class, 'setSuccessInstantly'])->name('transaction.set-success');
+    Route::get('/transaction/pelunasan/{id}', [TransactionController::class, 'pelunasan'])->name('transaction.pelunasan');
+    Route::post('/transaction/pelunasan/{id}', [TransactionController::class, 'processPelunasan'])->name('transaction.pelunasan.process');
 
     // Cicilan (Installment)
     Route::get('/installment/pay/{installmentId}', [InstallmentController::class, 'payInstallment'])->name('installment.pay');

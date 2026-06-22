@@ -159,6 +159,32 @@ class TransactionController extends Controller
 
         $orderId = $request->order_id;
 
+        if (str_contains($orderId, '-LUNAS-')) {
+            $parts = explode('-LUNAS-', $orderId);
+            $transaction = Transaction::where('transaction_code', $parts[0])->first();
+            if (!$transaction) {
+                return response()->json(['status' => 'transaction not found'], 404);
+            }
+            $transactionStatus = $request->transaction_status;
+            $fraudStatus = $request->fraud_status;
+            if (in_array($transactionStatus, ['capture', 'settlement'])) {
+                if ($transactionStatus === 'capture' && $fraudStatus !== 'accept') {
+                    return response()->json(['status' => 'fraud detected']);
+                }
+                $transaction->update([
+                    'payment_status' => 'success',
+                    'amount_paid' => $transaction->gross_amount,
+                ]);
+                $property = Property::find($transaction->property_id);
+                if ($property && $property->status !== 'sold') {
+                    $property->update(['status' => 'sold']);
+                }
+            } elseif (in_array($transactionStatus, ['deny', 'cancel', 'expire'])) {
+                $transaction->update(['payment_status' => 'failed']);
+            }
+            return response()->json(['status' => 'ok']);
+        }
+
         if (str_contains($orderId, '-CICILAN-')) {
             $parts = explode('-CICILAN-', $orderId);
             $transactionCode = $parts[0];
@@ -222,10 +248,12 @@ class TransactionController extends Controller
         $transactionStatus = $request->transaction_status;
         $fraudStatus = $request->fraud_status;
 
+        $newStatus = $transaction->payment_type === 'booking' ? 'booking_paid' : 'success';
+
         if ($transactionStatus == 'capture') {
             if ($fraudStatus == 'accept') {
                 $transaction->update([
-                    'payment_status' => 'success',
+                    'payment_status' => $newStatus,
                     'amount_paid' => $transaction->gross_amount,
                 ]);
                 if ($transaction->is_installment && $transaction->installment_count > 1) {
@@ -245,7 +273,7 @@ class TransactionController extends Controller
             }
         } elseif ($transactionStatus == 'settlement') {
             $transaction->update([
-                'payment_status' => 'success',
+                'payment_status' => $newStatus,
                 'amount_paid' => $transaction->gross_amount,
             ]);
             if ($transaction->is_installment && $transaction->installment_count > 1) {
@@ -336,14 +364,18 @@ class TransactionController extends Controller
         ]);
     }
 
+    $newStatus = $transaction->payment_type === 'booking' ? 'booking_paid' : 'success';
+
     $transaction->update([
-        'payment_status' => 'success',
+        'payment_status' => $newStatus,
         'amount_paid'    => $transaction->gross_amount
     ]);
 
-    $property = \App\Models\Property::find($transaction->property_id);
-    if ($property && $property->status !== 'sold') {
-        $property->update(['status' => 'sold']);
+    if ($newStatus === 'success') {
+        $property = \App\Models\Property::find($transaction->property_id);
+        if ($property && $property->status !== 'sold') {
+            $property->update(['status' => 'sold']);
+        }
     }
 
     return response()->json([
@@ -351,6 +383,114 @@ class TransactionController extends Controller
         'message' => 'Pembayaran berhasil diperbarui langsung!'
     ]);
 }
+
+    public function pelunasan($id)
+    {
+        $transaction = Transaction::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($transaction->payment_status !== 'booking_paid') {
+            return redirect()->route('dashboard')->with('error', 'Transaksi ini tidak memerlukan pelunasan.');
+        }
+
+        $property = Property::find($transaction->property_id);
+        $bookingFee = config('payment.booking_fee');
+        $sisa = $property->price - $bookingFee;
+
+        return view('pages.pelunasan', compact('transaction', 'property', 'sisa'));
+    }
+
+    public function processPelunasan(Request $request, $id)
+    {
+        $request->validate([
+            'metode' => 'required|in:cash,cicilan',
+            'installment' => 'sometimes|in:none,monthly,quarterly,semi_annually',
+        ]);
+
+        $transaction = Transaction::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($transaction->payment_status !== 'booking_paid') {
+            return redirect()->route('dashboard')->with('error', 'Transaksi ini tidak memerlukan pelunasan.');
+        }
+
+        $property = Property::find($transaction->property_id);
+        $bookingFee = config('payment.booking_fee');
+        $sisa = $property->price - $bookingFee;
+
+        $metode = $request->metode;
+        $installmentPlan = $request->get('installment', 'none');
+
+        if ($metode === 'cash') {
+            $transaction->update([
+                'payment_type' => 'cash',
+                'gross_amount' => $sisa,
+                'total_payable' => $sisa,
+                'installment_plan' => 'none',
+                'installment_count' => 1,
+                'installment_period_months' => 1,
+                'service_fee' => 0,
+                'installment_total' => 0,
+            ]);
+            $payAmount = $sisa;
+        } else {
+            $dpAmount = $sisa * config('payment.dp_rate');
+            $installmentData = InstallmentService::calculate($sisa, $installmentPlan);
+            $transaction->update([
+                'payment_type' => 'dp',
+                'gross_amount' => $sisa,
+                'total_payable' => $sisa,
+                'installment_plan' => $installmentPlan,
+                'installment_count' => $installmentData['installment_count'],
+                'installment_period_months' => $installmentData['installment_period_months'],
+                'service_fee' => $installmentData['service_fee'],
+                'installment_total' => $installmentData['total_with_fee'],
+                'paid_installments' => 0,
+            ]);
+
+            if ($installmentData['installment_count'] > 1) {
+                $transaction->installments()->delete();
+                $dueDates = InstallmentService::getDueDates($installmentPlan, $installmentData['installment_count']);
+                foreach ($dueDates as $i => $dueDate) {
+                    \App\Models\Installment::create([
+                        'transaction_id' => $transaction->id,
+                        'installment_number' => $i + 1,
+                        'amount' => $installmentData['per_installment'],
+                        'paid_amount' => 0,
+                        'due_date' => $dueDate,
+                        'payment_status' => 'pending',
+                    ]);
+                }
+            }
+
+            $payAmount = $installmentData['installment_count'] > 1
+                ? $installmentData['per_installment']
+                : $installmentData['total_with_fee'];
+        }
+
+        $orderId = $transaction->transaction_code . '-LUNAS-' . time();
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => (string) $orderId,
+                'gross_amount' => (int) round($payAmount),
+            ],
+            'customer_details' => [
+                'first_name' => (string) (auth()->user()->name ?? 'User Pembeli'),
+                'email' => (string) (auth()->user()->email ?? 'pembeli@test.com'),
+            ],
+        ];
+
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $transaction->load('installments');
+            $totalBayar = $payAmount;
+            $installmentData = $installmentData ?? null;
+            return view('pages.pelunasan-pay', compact(
+                'transaction', 'property', 'snapToken', 'totalBayar', 'metode', 'installmentPlan', 'installmentData'
+            ));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghubungkan ke gerbang pembayaran. Silakan coba lagi.');
+        }
+    }
 
     public function invoice($id)
     {
