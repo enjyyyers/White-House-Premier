@@ -89,18 +89,17 @@
 
                 if ($tipe === 'booking') {
                     $nilai_pokok = config('payment.booking_fee');
-                    $ipl_base = $nilai_pokok;
+                    $admin_calculated = 0;
+                    $tax_calculated = 0;
                 } elseif ($tipe === 'dp') {
                     $nilai_pokok = $propPrice * config('payment.dp_rate');
-                    $ipl_base = $propPrice;
+                    $admin_calculated = $propPrice * config('payment.admin_rate');
+                    $tax_calculated = $propPrice * config('payment.tax_rate');
                 } else {
                     $nilai_pokok = $propPrice;
-                    $ipl_base = $propPrice;
+                    $admin_calculated = $propPrice * config('payment.admin_rate');
+                    $tax_calculated = $propPrice * config('payment.tax_rate');
                 }
-
-                // Hitung IPL 20% dan PPN 2% sesuai base per metode
-                $ipl_calculated = $ipl_base * config('payment.ipl_rate');
-                $tax_calculated = $ipl_base * config('payment.tax_rate');
             @endphp
 
             <tr class="item">
@@ -108,15 +107,17 @@
                 <td class="font-weight-bold">Rp {{ number_format($nilai_pokok, 0, ',', '.') }}</td>
             </tr>
 
+            @if($tipe !== 'booking')
             <tr class="item">
-                <td style="color: #555; padding-left: 15px;">Biaya Pengelolaan Lingkungan (IPL 20% @if($tipe === 'booking')dari Booking Fee @else dari Harga Properti @endif)</td>
-                <td style="color: #dd6b20;">+ Rp {{ number_format($ipl_calculated, 0, ',', '.') }}</td>
+                <td style="color: #555; padding-left: 15px;">Biaya Administrasi (1%)</td>
+                <td style="color: #dd6b20;">+ Rp {{ number_format($admin_calculated, 0, ',', '.') }}</td>
             </tr>
 
             <tr class="item">
-                <td style="color: #555; padding-left: 15px;">Pajak Pertambahan Nilai (PPN 2% @if($tipe === 'booking')dari Booking Fee @else dari Harga Properti @endif)</td>
+                <td style="color: #555; padding-left: 15px;">PPN 11%</td>
                 <td style="color: #dd6b20;">+ Rp {{ number_format($tax_calculated, 0, ',', '.') }}</td>
             </tr>
+            @endif
 
             <tr class="total">
                 <td></td>

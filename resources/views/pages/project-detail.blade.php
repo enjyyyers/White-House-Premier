@@ -243,8 +243,6 @@
 
             <div class="lg:col-span-1">
     @php
-        $iplDef = ($project->ipl_cost ?? 0) > 0 ? $project->ipl_cost : 0;
-        $taxDef = ($project->tax_cost ?? 0) > 0 ? $project->tax_cost : 0;
         $bookingFee = config('payment.booking_fee');
     @endphp
     <div x-data="{
@@ -252,20 +250,20 @@
         cicilan: 'none',
         hargaProperti: {{ $project->price ?? $project['price'] ?? 2000000000 }},
         bookingFee: {{ $bookingFee }},
-        iplCost: {{ $iplDef }},
-        taxCost: {{ $taxDef }},
         get pokok() {
             if (this.tipeBayar === 'booking') return this.bookingFee;
             if (this.tipeBayar === 'dp') return this.hargaProperti * 0.20;
             return this.hargaProperti;
         },
-        get iplBase() {
-            if (this.tipeBayar === 'booking') return this.bookingFee;
-            return this.hargaProperti;
+        get admin() {
+            if (this.tipeBayar === 'booking') return 0;
+            return this.hargaProperti * 0.01;
         },
-        get ipl() { return this.iplCost > 0 ? this.iplCost : this.iplBase * 0.20; },
-        get tax() { return this.taxCost > 0 ? this.taxCost : this.iplBase * 0.02; },
-        get total() { return this.pokok + this.ipl + this.tax; },
+        get tax() {
+            if (this.tipeBayar === 'booking') return 0;
+            return this.hargaProperti * 0.11;
+        },
+        get total() { return this.pokok + this.admin + this.tax; },
 
         get showCicilan() { return this.tipeBayar === 'booking' || this.tipeBayar === 'dp'; },
 
@@ -356,15 +354,13 @@
                     <span class="font-semibold text-gray-800">Rp <span x-text="pokok.toLocaleString('id-ID')"></span></span>
                 </div>
 
-                <div class="flex justify-between text-sm text-gray-600">
-                    <span>IPL <span x-text="iplCost > 0 ? '(Fixed)' : (tipeBayar === 'booking' ? '(20% dari Booking Fee)' : '(20% dari Harga Properti)')"></span></span>
-                    <span class="font-medium text-gray-900">Rp <span x-text="ipl.toLocaleString('id-ID')"></span></span>
+                <div x-show="tipeBayar !== 'booking'" class="flex justify-between text-sm text-gray-600">
+                    <span>Biaya Administrasi (1%)</span>
+                    <span class="font-medium text-gray-900">Rp <span x-text="admin.toLocaleString('id-ID')"></span></span>
                 </div>
 
-                <hr class="border-gray-100">
-
-                <div class="flex justify-between text-sm text-gray-600">
-                    <span>Pajak (PPN) <span x-text="taxCost > 0 ? '(Fixed)' : (tipeBayar === 'booking' ? '(2% dari Booking Fee)' : '(2% dari Harga Properti)')"></span></span>
+                <div x-show="tipeBayar !== 'booking'" class="flex justify-between text-sm text-gray-600">
+                    <span>PPN 11%</span>
                     <span class="font-medium text-gray-900">Rp <span x-text="tax.toLocaleString('id-ID')"></span></span>
                 </div>
 

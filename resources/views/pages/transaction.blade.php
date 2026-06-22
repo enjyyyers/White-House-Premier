@@ -71,15 +71,16 @@
                                 <span class="font-medium text-gray-800">Rp {{ number_format($project['price_raw'] ?? 0, 0, ',', '.') }}</span>
                             </div>
 
+                            @if($transaction->payment_type !== 'booking')
                             <div class="flex justify-between text-sm text-gray-600">
-                                <span>Biaya IPL @if($transaction->payment_type === 'booking')(20% dari Booking Fee)@else(20% dari Harga Properti)@endif:</span>
-                                <span class="text-gray-800">+ Rp {{ number_format($project['ipl'] ?? 0, 0, ',', '.') }}</span>
+                                <span>Biaya Administrasi (1%):</span>
+                                <span class="text-gray-800">+ Rp {{ number_format($project['admin'] ?? 0, 0, ',', '.') }}</span>
                             </div>
-
                             <div class="flex justify-between text-sm text-gray-600">
-                                <span>Pajak PPN @if($transaction->payment_type === 'booking')(2% dari Booking Fee)@else(2% dari Harga Properti)@endif:</span>
+                                <span>PPN 11%:</span>
                                 <span class="text-gray-800">+ Rp {{ number_format($project['tax'] ?? 0, 0, ',', '.') }}</span>
                             </div>
+                            @endif
 
                             <hr class="my-4">
 

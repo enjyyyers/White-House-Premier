@@ -54,13 +54,30 @@
 
                             <hr class="my-3" style="border-top: 1px dashed #cbd5e0;">
 
+                            @php
+                                $adminPelunasan = $property->price * config('payment.admin_rate');
+                                $ppnPelunasan = $property->price * config('payment.tax_rate');
+                            @endphp
+
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Harga Properti:</span>
                                 <span class="text-gray-800">Rp {{ number_format($property->price, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Sudah Dibayar (Booking):</span>
-                                <span class="text-green-600 font-medium">Rp {{ number_format(config('payment.booking_fee'), 0, ',', '.') }}</span>
+                                <span class="text-green-600 font-medium">- Rp {{ number_format(config('payment.booking_fee'), 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Sisa Tagihan:</span>
+                                <span class="font-semibold text-gray-800">Rp {{ number_format($property->price - config('payment.booking_fee'), 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Biaya Administrasi (1%):</span>
+                                <span class="font-semibold text-gray-800">+ Rp {{ number_format($adminPelunasan, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>PPN 11%:</span>
+                                <span class="font-semibold text-gray-800">+ Rp {{ number_format($ppnPelunasan, 0, ',', '.') }}</span>
                             </div>
 
                             @if($metode === 'cicilan' && isset($installmentData))

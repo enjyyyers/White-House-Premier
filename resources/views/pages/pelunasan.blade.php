@@ -31,6 +31,12 @@
                     </div>
                 </div>
 
+                @php
+                    $admin = $property->price * config('payment.admin_rate');
+                    $ppn = $property->price * config('payment.tax_rate');
+                    $totalPelunasan = $sisa + $admin + $ppn;
+                @endphp
+
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Harga Properti</p>
@@ -42,13 +48,28 @@
                     </div>
                 </div>
 
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Sisa Tagihan (Harga Properti - Booking Fee)</span>
+                        <span class="font-semibold text-gray-800">Rp {{ number_format($sisa, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Biaya Administrasi (1%)</span>
+                        <span class="font-semibold text-gray-800">+ Rp {{ number_format($admin, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>PPN 11%</span>
+                        <span class="font-semibold text-gray-800">+ Rp {{ number_format($ppn, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+
                 <div class="bg-amber-50 rounded-xl p-5 border border-amber-200">
                     <div class="flex justify-between items-center">
                         <div>
-                            <p class="text-sm font-semibold text-amber-700 uppercase tracking-wider">Sisa yang Harus Dibayar</p>
-                            <p class="text-xs text-amber-600 mt-0.5">(Harga Properti - Booking Fee)</p>
+                            <p class="text-sm font-semibold text-amber-700 uppercase tracking-wider">Total Pelunasan</p>
+                            <p class="text-xs text-amber-600 mt-0.5">(Sisa + Administrasi + PPN)</p>
                         </div>
-                        <p class="text-2xl font-black text-amber-800">Rp {{ number_format($sisa, 0, ',', '.') }}</p>
+                        <p class="text-2xl font-black text-amber-800">Rp {{ number_format($totalPelunasan, 0, ',', '.') }}</p>
                     </div>
                 </div>
 

@@ -54,22 +54,22 @@ class TransactionController extends Controller
 
         if ($tipe === 'booking') {
             $price_raw = config('payment.booking_fee');
-            $ipl_base = $price_raw;
+            $admin = 0;
+            $tax = 0;
         } elseif ($tipe === 'dp') {
             $price_raw = $propPrice * config('payment.dp_rate');
-            $ipl_base = $propPrice;
+            $admin = $propPrice * config('payment.admin_rate');
+            $tax = $propPrice * config('payment.tax_rate');
         } else {
             $price_raw = $propPrice;
-            $ipl_base = $propPrice;
+            $admin = $propPrice * config('payment.admin_rate');
+            $tax = $propPrice * config('payment.tax_rate');
         }
-
-        $ipl = $ipl_base * config('payment.ipl_rate');
-        $tax = $ipl_base * config('payment.tax_rate');
 
         $installmentOptions = \App\Services\InstallmentService::plans();
 
         return view('admin.transaction.show', compact(
-            'transaction', 'property', 'price_raw', 'ipl', 'tax', 'installmentOptions'
+            'transaction', 'property', 'price_raw', 'admin', 'tax', 'installmentOptions'
         ));
     }
 
@@ -97,18 +97,19 @@ class TransactionController extends Controller
 
         if ($newType === 'booking') {
             $price_raw = config('payment.booking_fee');
-            $ipl_base = $price_raw;
+            $admin = 0;
+            $tax_calculated = 0;
         } elseif ($newType === 'dp') {
             $price_raw = $propPrice * config('payment.dp_rate');
-            $ipl_base = $propPrice;
+            $admin = $propPrice * config('payment.admin_rate');
+            $tax_calculated = $propPrice * config('payment.tax_rate');
         } else {
             $price_raw = $propPrice;
-            $ipl_base = $propPrice;
+            $admin = $propPrice * config('payment.admin_rate');
+            $tax_calculated = $propPrice * config('payment.tax_rate');
         }
 
-        $ipl_calculated = $ipl_base * config('payment.ipl_rate');
-        $tax_calculated = $ipl_base * config('payment.tax_rate');
-        $total_baru = $price_raw + $ipl_calculated + $tax_calculated;
+        $total_baru = $price_raw + $admin + $tax_calculated;
 
         $updateData = [
             'payment_status' => $newStatus,

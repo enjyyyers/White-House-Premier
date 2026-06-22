@@ -105,14 +105,16 @@
                         <span class="text-slate-500">Nilai Pokok Pembayaran</span>
                         <span class="font-semibold text-slate-800">Rp {{ number_format($price_raw, 0, ',', '.') }}</span>
                     </div>
+                    @if($transaction->payment_type !== 'booking')
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-slate-500">Biaya Lingkungan & Pengelolaan (IPL 20% @if($transaction->payment_type === 'booking')dari Booking Fee @else dari Harga Properti @endif)</span>
-                        <span class="font-medium text-amber-600">+ Rp {{ number_format($ipl, 0, ',', '.') }}</span>
+                        <span class="text-slate-500">Biaya Administrasi (1%)</span>
+                        <span class="font-medium text-amber-600">+ Rp {{ number_format($admin, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between items-center text-sm pb-3 border-b border-slate-100">
-                        <span class="text-slate-500">Pajak Pertambahan Nilai (PPN 2% @if($transaction->payment_type === 'booking')dari Booking Fee @else dari Harga Properti @endif)</span>
+                        <span class="text-slate-500">PPN 11%</span>
                         <span class="font-medium text-amber-600">+ Rp {{ number_format($tax, 0, ',', '.') }}</span>
                     </div>
+                    @endif
                     <div class="flex justify-between items-center pt-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <span class="text-base font-bold text-slate-800">Total Dana Masuk</span>
                         <span class="text-xl font-extrabold text-emerald-600">Rp {{ number_format($transaction->total_payable, 0, ',', '.') }}</span>
@@ -135,9 +137,9 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Metode Transaksi</label>
                             <select name="payment_type" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
-                                <option value="booking" {{ $transaction->payment_type == 'booking' ? 'selected' : '' }}>BOOKING (Rp 10.000.000 + Pajak)</option>
-                                <option value="dp" {{ $transaction->payment_type == 'dp' ? 'selected' : '' }}>DP 20% + Pajak</option>
-                                <option value="cash" {{ $transaction->payment_type == 'cash' ? 'selected' : '' }}>CASH PENUH + Pajak</option>
+                                <option value="booking" {{ $transaction->payment_type == 'booking' ? 'selected' : '' }}>BOOKING (Rp 10.000.000, tanpa Adm/PPN)</option>
+                                <option value="dp" {{ $transaction->payment_type == 'dp' ? 'selected' : '' }}>DP 20% + Adm (1%) + PPN (11%)</option>
+                                <option value="cash" {{ $transaction->payment_type == 'cash' ? 'selected' : '' }}>CASH + Adm (1%) + PPN (11%)</option>
                             </select>
                         </div>
 

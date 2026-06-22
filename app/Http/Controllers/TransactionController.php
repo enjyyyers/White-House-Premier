@@ -42,19 +42,19 @@ class TransactionController extends Controller
 
         if ($method === 'booking') {
             $price_raw = config('payment.booking_fee');
-            $ipl_base = $price_raw;
+            $admin = 0;
+            $tax = 0;
         } elseif ($method === 'dp') {
             $price_raw = $price_base * config('payment.dp_rate');
-            $ipl_base = $price_base;
+            $admin = $price_base * config('payment.admin_rate');
+            $tax = $price_base * config('payment.tax_rate');
         } else {
             $price_raw = $price_base;
-            $ipl_base = $price_base;
+            $admin = $price_base * config('payment.admin_rate');
+            $tax = $price_base * config('payment.tax_rate');
         }
 
-        $ipl = $property->ipl_cost > 0 ? $property->ipl_cost : ($ipl_base * config('payment.ipl_rate'));
-        $tax = $property->tax_cost > 0 ? $property->tax_cost : ($ipl_base * config('payment.tax_rate'));
-
-        $grossAmountOriginal = $price_raw + $ipl + $tax;
+        $grossAmountOriginal = $price_raw + $admin + $tax;
 
         $installmentData = null;
         $installmentTotal = $grossAmountOriginal;
@@ -73,14 +73,14 @@ class TransactionController extends Controller
         $grossAmount = $installmentTotal;
 
         $property->price_raw = $price_raw;
-        $property->ipl = $ipl;
+        $property->admin = $admin;
         $property->tax = $tax;
 
         $project = [
             'id'        => $property->id,
             'name'      => $property->name,
             'price_raw' => $price_raw,
-            'ipl'       => $ipl,
+            'admin'     => $admin,
             'tax'       => $tax,
         ];
 
@@ -415,6 +415,9 @@ class TransactionController extends Controller
         $property = Property::find($transaction->property_id);
         $bookingFee = config('payment.booking_fee');
         $sisa = $property->price - $bookingFee;
+        $admin = $property->price * config('payment.admin_rate');
+        $tax = $property->price * config('payment.tax_rate');
+        $totalPelunasan = $sisa + $admin + $tax;
 
         $metode = $request->metode;
         $installmentPlan = $request->get('installment', 'none');
@@ -422,22 +425,21 @@ class TransactionController extends Controller
         if ($metode === 'cash') {
             $transaction->update([
                 'payment_type' => 'cash',
-                'gross_amount' => $sisa,
-                'total_payable' => $sisa,
+                'gross_amount' => $totalPelunasan,
+                'total_payable' => $totalPelunasan,
                 'installment_plan' => 'none',
                 'installment_count' => 1,
                 'installment_period_months' => 1,
                 'service_fee' => 0,
                 'installment_total' => 0,
             ]);
-            $payAmount = $sisa;
+            $payAmount = $totalPelunasan;
         } else {
-            $dpAmount = $sisa * config('payment.dp_rate');
-            $installmentData = InstallmentService::calculate($sisa, $installmentPlan);
+            $installmentData = InstallmentService::calculate($totalPelunasan, $installmentPlan);
             $transaction->update([
                 'payment_type' => 'dp',
-                'gross_amount' => $sisa,
-                'total_payable' => $sisa,
+                'gross_amount' => $totalPelunasan,
+                'total_payable' => $totalPelunasan,
                 'installment_plan' => $installmentPlan,
                 'installment_count' => $installmentData['installment_count'],
                 'installment_period_months' => $installmentData['installment_period_months'],
