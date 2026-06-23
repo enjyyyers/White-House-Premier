@@ -35,15 +35,15 @@
                         @php
                             $statusColors = [
                                 'pending' => 'bg-yellow-100 text-yellow-700',
-                                'approved' => 'bg-green-100 text-green-700',
+                                'confirmed' => 'bg-blue-100 text-blue-700',
+                                'completed' => 'bg-green-100 text-green-700',
                                 'cancelled' => 'bg-red-100 text-red-700',
-                                'completed' => 'bg-blue-100 text-blue-700',
                             ];
                             $statusLabels = [
                                 'pending' => 'Menunggu',
-                                'approved' => 'Disetujui',
-                                'cancelled' => 'Dibatalkan',
+                                'confirmed' => 'Dikonfirmasi',
                                 'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
                             ];
                         @endphp
                         <span class="px-3 py-1 rounded-full text-xs font-bold uppercase {{ $statusColors[$visit->status] ?? 'bg-gray-100 text-gray-700' }}">
@@ -51,17 +51,15 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        @if($visit->status !== 'cancelled' && $visit->status !== 'completed')
                         <form action="{{ route('admin.visit-schedules.update', $visit->id) }}" method="POST">
                             @csrf @method('PATCH')
                             <select name="status" onchange="this.form.submit()" class="text-xs border-gray-200 rounded-lg focus:ring-blue-500 cursor-pointer">
-                                <option value="approved" {{ $visit->status == 'approved' ? 'selected' : '' }}>✓ Setujui</option>
-                                <option value="cancelled" {{ $visit->status == 'cancelled' ? 'selected' : '' }}>✕ Tolak</option>
+                                <option value="pending" {{ $visit->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="confirmed" {{ $visit->status == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi</option>
+                                <option value="completed" {{ $visit->status == 'completed' ? 'selected' : '' }}>Selesai</option>
+                                <option value="cancelled" {{ $visit->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                             </select>
                         </form>
-                        @else
-                        <span class="text-xs text-gray-400 italic">{{ $statusLabels[$visit->status] ?? $visit->status }}</span>
-                        @endif
                     </td>
                 </tr>
                 @endforeach

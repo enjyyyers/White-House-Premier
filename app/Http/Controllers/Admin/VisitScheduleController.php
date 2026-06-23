@@ -16,7 +16,7 @@ class VisitScheduleController extends Controller
 public function updateStatus(Request $request, $id)
 {
     $request->validate([
-        'status' => 'required|in:pending,approved,cancelled,completed',
+        'status' => 'required|in:pending,confirmed,completed,cancelled',
     ]);
     $visit = \App\Models\VisitSchedule::findOrFail($id);
     $visit->update(['status' => $request->status]);
