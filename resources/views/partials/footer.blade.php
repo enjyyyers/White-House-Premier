@@ -46,13 +46,13 @@
             
             <!-- Property Types -->
             <div>
-                <h4 class="font-display font-semibold text-lg mb-6 text-gold-400">Tipe Properti</h4>
+                <h4 class="font-display font-semibold text-lg mb-6 text-gold-400">Tipe Cluster</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Rumah Mewah</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Apartemen</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Villa</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Penthouse</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Commercial</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Cluster Andhreva</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Cluster Bahoma</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Cluster Mahony</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Cluster Lily</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-gold-400 transition-colors">Cluster Rosemary</a></li>
                 </ul>
             </div>
             
