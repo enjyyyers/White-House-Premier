@@ -51,14 +51,15 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <form action="{{ route('admin.visit-schedules.update', $visit->id) }}" method="POST">
+                        <form action="{{ route('admin.visit-schedules.update', $visit->id) }}" method="POST" class="flex items-center justify-center gap-2">
                             @csrf @method('PATCH')
-                            <select name="status" onchange="this.form.submit()" class="text-xs border-gray-200 rounded-lg focus:ring-blue-500 cursor-pointer">
+                            <select name="status" class="text-xs border-gray-200 rounded-lg focus:ring-blue-500 cursor-pointer">
                                 <option value="pending" {{ $visit->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="confirmed" {{ $visit->status == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi</option>
                                 <option value="completed" {{ $visit->status == 'completed' ? 'selected' : '' }}>Selesai</option>
                                 <option value="cancelled" {{ $visit->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                             </select>
+                            <button type="submit" class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
                         </form>
                     </td>
                 </tr>
