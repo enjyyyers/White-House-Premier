@@ -3,127 +3,87 @@
 
 | Item | Detail |
 |------|--------|
-| **Modul** | Autentikasi — Failed Login Scenarios |
-| **Metode** | Black Box Testing + PHPUnit Feature Test |
-| **Endpoint** | `POST /login` |
-| **Controller** | `AuthController@login` |
-| **File Test** | `tests/Feature/FailedLoginTest.php` |
-| **Trait** | `RefreshDatabase` (isolasi data per test) |
-| **Tgl Eksekusi** | 6 Juni 2026 |
-| **Status** | ✅ **8/8 PASS — 0 FAIL** |
+| **Tanggal Eksekusi** | 23 Juni 2026 |
+| **Metode** | Black Box Testing |
+| **Total Test Case** | **25** |
+| **Status Akhir** | **24 PASS — 1 FAIL (96%)** |
 
 ---
 
-**2.5 Test Execution**
-
-Tahap ini merupakan pelaksanaan eksekusi test case terhadap sistem yang telah disiapkan pada tahap sebelumnya. Pengujian dilakukan menggunakan PHPUnit 10 dengan metode Black Box Testing, berfokus pada skenario gagal login pada modul autentikasi aplikasi White House Premiere.
-
-**Lingkungan Eksekusi:**
-- Server: Localhost (Laragon) — PHP 8.1 / MySQL 8.0
-- Test Runner: `php artisan test --filter FailedLoginTest`
-- Framework: Laravel 10 + PHPUnit 10
-- Database: MySQL (RefreshDatabase — migrasi dijalankan otomatis per test)
-
----
-
-## Hasil Eksekusi Test
-
-| TC ID | Skenario | Data Input | Langkah Uji | Expected Result | Actual Result | Status | Waktu |
-|-------|----------|-----------|-------------|-----------------|---------------|--------|-------|
-| **FL-01** | Login — Email kosong | email: `""`, password: `"password123"` | 1. Buka `/login`<br>2. Kosongkan email<br>3. Isi password<br>4. Klik Masuk | Validasi "Email wajib diisi" redirect ke `/login` | Session error "Email wajib diisi", redirect ke `/login` ✅ | **PASS** | 2.03s |
-| **FL-02** | Login — Password kosong | email: `"testuser@example.com"`, password: `""` | 1. Buka `/login`<br>2. Isi email terdaftar<br>3. Kosongkan password<br>4. Klik Masuk | Validasi "Password wajib diisi" redirect ke `/login` | Session error "Password wajib diisi", redirect ke `/login` ✅ | **PASS** | 0.05s |
-| **FL-03** | Login — Email tidak terdaftar | email: `"tidakada@example.com"`, password: `"password123"` | 1. Buka `/login`<br>2. Isi email tidak terdaftar<br>3. Isi password<br>4. Klik Masuk | Error "Email atau password salah", tidak redirect ke dashboard | Session error "Email atau password salah" ✅ | **PASS** | 0.27s |
-| **FL-04** | Login — Password salah | email: `"testuser@example.com"`, password: `"passwordSALAH"` | 1. Buka `/login`<br>2. Isi email terdaftar<br>3. Isi password salah<br>4. Klik Masuk | Error "Email atau password salah", tidak redirect ke dashboard | Session error "Email atau password salah" ✅ | **PASS** | 0.23s |
-| **FL-05** | Login — Format email invalid | email: `"bukanemail"`, password: `"password123"` | 1. Buka `/login`<br>2. Isi email format salah<br>3. Isi password<br>4. Klik Masuk | Validasi "Format email tidak valid" redirect ke `/login` | Session error "Format email tidak valid" ✅ | **PASS** | 0.04s |
-| **FL-06** | Login — Password < 8 karakter | email: `"testuser@example.com"`, password: `"1234567"` | 1. Buka `/login`<br>2. Isi email terdaftar<br>3. Isi password 7 char<br>4. Klik Masuk | Validasi "Password minimal 8 karakter" redirect ke `/login` | Session error "Password minimal 8 karakter" ✅ | **PASS** | 0.03s |
-| **FL-07** | Login — Email & Password kosong | email: `""`, password: `""` | 1. Buka `/login`<br>2. Kosongkan kedua field<br>3. Klik Masuk | Validasi "Email wajib diisi" + "Password wajib diisi" | Session errors [email, password] ✅ | **PASS** | 0.03s |
-| **FL-08** | Login — Rate Limit (5x gagal) | email: `"testuser@example.com"`, password: `"passwordSALAH"` (x6) | 1. Login gagal 5x berturut-turut<br>2. Percobaan ke-6 | HTTP 429 Too Many Requests | Response status 429 ✅ | **PASS** | 1.18s |
-
----
-
-## Ringkasan Eksekusi
+## Ringkasan Hasil
 
 ```
 ┌─────────────────────────────────────┬──────────┬──────────┬──────────┐
-│          Test Suite                 │  Total   │  PASS    │  FAIL    │
+│          Modul                      │  Total   │  PASS    │  FAIL    │
 ├─────────────────────────────────────┼──────────┼──────────┼──────────┤
-│  FL-01 : Login — Email kosong      │    1     │    1     │    0     │
-│  FL-02 : Login — Password kosong   │    1     │    1     │    0     │
-│  FL-03 : Login — Email tdk terdaftar│    1    │    1     │    0     │
-│  FL-04 : Login — Password salah    │    1     │    1     │    0     │
-│  FL-05 : Login — Format email invalid│   1    │    1     │    0     │
-│  FL-06 : Login — Password < 8 char │    1     │    1     │    0     │
-│  FL-07 : Login — Email & Pass kosong│   1     │    1     │    0     │
-│  FL-08 : Login — Rate Limit (5x)   │    1     │    1     │    0     │
+│  3.1 Authentication & Registration  │    4     │    4     │    0     │
+│  3.2 Public Pages                   │    7     │    6     │    1     │
+│  3.3 Admin Dashboard (Backend)      │    9     │    9     │    0     │
+│  3.4 Security Testing               │    5     │    5     │    0     │
 ├─────────────────────────────────────┼──────────┼──────────┼──────────┤
-│  TOTAL                             │    8     │    8     │    0     │
+│  TOTAL                              │   25     │   24     │    1     │
 └─────────────────────────────────────┴──────────┴──────────┴──────────┘
 ```
 
 | Metrik | Nilai |
 |--------|-------|
-| ✅ **Test Case Lulus (PASS)** | **8 / 8** |
-| ❌ **Test Case Gagal (FAIL)** | **0 / 8** |
-| 🎯 **Pass Rate** | **100%** |
-| ⏱️ **Total Durasi** | **4.26 detik** |
-| 🔢 **Total Assertions** | **23** |
-| 🐛 **Defect Ditemukan** | **0** |
+| ✅ **Test Case Lulus (PASS)** | **24 / 25** |
+| ❌ **Test Case Gagal (FAIL)** | **1 / 25** |
+| 🎯 **Pass Rate** | **96%** |
 
 ---
 
-## Detail Assertions
+## 3.1 Authentication & Registration
 
-| Test | Assertions |
-|------|-----------|
-| FL-01 — Email kosong | `assertSessionHasErrors`, `assertRedirect` |
-| FL-02 — Password kosong | `assertSessionHasErrors`, `assertRedirect` |
-| FL-03 — Email tidak terdaftar | `assertSessionHasErrors`, `assertRedirect` |
-| FL-04 — Password salah | `assertSessionHasErrors`, `assertRedirect` |
-| FL-05 — Format email invalid | `assertSessionHasErrors`, `assertRedirect` |
-| FL-06 — Password < 8 char | `assertSessionHasErrors`, `assertRedirect` |
-| FL-07 — Email & Pass kosong | `assertSessionHasErrors` (multi), `assertRedirect` |
-| FL-08 — Rate limit | `assertStatus(429)` (x1) + loop 5x request |
+| TC ID | Fitur | Status | Catatan Eksekusi |
+|-------|-------|--------|------------------|
+| TC001 | Login Admin | ✅ PASS | Login admin berhasil, redirect ke dashboard sesuai role. |
+| TC002 | Registrasi User Baru | ✅ PASS | Registrasi user baru berhasil tanpa error. |
+| TC003 | Login dengan Kredensial Salah | ✅ PASS | Pesan error kredensial salah tampil dengan baik. |
+| TC011 | Logout | ✅ PASS | Logout berhasil menghapus sesi pengguna. |
 
----
+## 3.2 Public Pages
 
-## Evidence Eksekusi (Terminal Output)
+| TC ID | Fitur | Status | Catatan Eksekusi |
+|-------|-------|--------|------------------|
+| TC004 | Halaman Home & Properti Unggulan | ✅ PASS | Halaman utama tampil sempurna, seluruh konten termuat. |
+| TC005 | Halaman Project / Daftar Properti | ✅ PASS | Seluruh data properti tampil sesuai database. |
+| TC006 | Detail Properti | ✅ PASS | Detail properti lengkap dan akurat. |
+| TC007 | Filter & Pencarian Properti | ❌ FAIL | Filter harga tidak berfungsi, hasil tidak sesuai input pengguna. |
+| TC008 | Halaman Testimoni & Review | ✅ PASS | Testimoni & rating tampil dengan benar. |
+| TC009 | Form Contact / Hubungi Kami | ✅ PASS | Form contact berhasil terkirim dan tercatat di Inquiries. |
+| TC010 | Fitur Live Chat | ✅ PASS | Live chat berjalan real-time tanpa delay berarti. |
 
-```
-  PASS  Tests\Feature\FailedLoginTest
-  ✓ login dengan email kosong
-  ✓ login dengan password kosong
-  ✓ login dengan email tidak terdaftar
-  ✓ login dengan password salah
-  ✓ login dengan format email invalid
-  ✓ login dengan password kurang dari 8 karakter
-  ✓ login dengan email dan password kosong
-  ✓ login rate limit setelah 5 percobaan gagal
+## 3.3 Admin Dashboard (Backend)
 
-  Tests:    8 passed (23 assertions)
-  Duration: 4.26s
-```
+| TC ID | Fitur | Status | Catatan Eksekusi |
+|-------|-------|--------|------------------|
+| TC012 | Dashboard Admin - Ringkasan Statistik | ✅ PASS | Statistik dashboard sesuai data aktual sistem. |
+| TC013 | Manajemen Unit - Tambah/Edit Unit | ✅ PASS | Penambahan unit baru berhasil dan tampil otomatis di publik. |
+| TC014 | Tipe & Cluster - Kelola Data | ✅ PASS | Tipe & cluster baru tersimpan dan dapat dipilih. |
+| TC015 | Transaksi - Lihat Daftar Transaksi | ✅ PASS | Daftar transaksi dan detail tampil dengan akurat. |
+| TC016 | Inquiries - Kelola Pertanyaan Calon Pembeli | ✅ PASS | Inquiries dari user tercatat dan dapat dibalas admin. |
+| TC017 | Jadwal Kunjungan - Kelola Jadwal | ✅ PASS | Status jadwal kunjungan berhasil diperbarui. |
+| TC018 | Fasilitas - Kelola Data Fasilitas | ✅ PASS | Data fasilitas baru tersimpan dan dapat dikaitkan ke unit. |
+| TC019 | Manajemen Users - Kelola Pengguna | ✅ PASS | Status pengguna dapat dikelola admin dengan baik. |
+| TC020 | Laporan Admin - Generate Laporan | ✅ PASS | Laporan berhasil digenerate sesuai periode. |
 
----
+## 3.4 Security Testing
 
-## Defect yang Ditemukan
-
-| ID | Defect | Severity | Status |
-|----|--------|----------|--------|
-| — | Tidak ada defect ditemukan | — | ✅ Bersih |
-
----
-
-## Kesimpulan
-
-Seluruh skenario pengujian failed login telah dieksekusi dan **100% lulus (8/8 PASS)**. Sistem berhasil:
-
-1. **Memvalidasi input** — Email kosong, password kosong, format email invalid, password < 8 karakter → pesan error dalam Bahasa Indonesia
-2. **Menolak kredensial salah** — Email tidak terdaftar dan password salah → error "Email atau password salah"
-3. **Menerapkan rate limiting** — 5 percobaan gagal berturut-turut → HTTP 429 Too Many Requests
-4. **Tidak ada bug atau defect** yang ditemukan pada modul autentikasi login
-
-Modul autentikasi **dinyatakan LULUS** dan siap untuk tahap pengujian berikutnya.
+| TC ID | Fitur | Status | Catatan Eksekusi |
+|-------|-------|--------|------------------|
+| TC021 | Keamanan - SQL Injection pada Form Login | ✅ PASS | Tidak ditemukan celah SQL Injection pada form login. |
+| TC022 | Keamanan - XSS pada Form Contact/Chat | ✅ PASS | Input berbahaya berhasil disanitasi (anti-XSS). |
+| TC023 | Keamanan - Akses Unauthorized ke Dashboard Admin | ✅ PASS | Akses tanpa sesi valid berhasil ditolak sistem. |
+| TC024 | Keamanan - Enkripsi Password & HTTPS | ✅ PASS | HTTPS aktif, password tersimpan dalam bentuk hash. |
+| TC025 | Keamanan - Session Timeout & Validasi Token | ✅ PASS | Sesi kedaluwarsa otomatis berakhir, meminta login ulang. |
 
 ---
 
-*Laporan Test Execution digenerate berdasarkan hasil eksekusi PHPUnit pada 6 Juni 2026 pukul 10:37 WIB.*
+## Ringkasan
+
+Dari **25 test case** yang dieksekusi, **24 dinyatakan PASS** dan **1 dinyatakan FAIL** (TC007 — Filter & Pencarian Properti), sehingga tingkat kelulusan pengujian mencapai **96%**.
+
+---
+
+*Laporan Test Execution digenerate berdasarkan hasil eksekusi Black Box Testing pada 23 Juni 2026.*

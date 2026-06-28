@@ -205,7 +205,7 @@
 
 <!-- Map Section -->
 <section class="h-[500px] bg-gray-100">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.194741399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sMonumen%20Nasional!5e0!3m2!1sen!2sid!4v1234567890"
+    <iframe src="https://www.google.com/maps?q=-6.3854431,106.8869915&hl=id&z=16&output=embed"
             class="w-full h-full"
             frameborder="0"
             style="border:0;"
@@ -224,7 +224,7 @@
             </h2>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-1 gap-8 max-w-md mx-auto">
             @foreach($offices as $office)
             <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
                 <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-6">

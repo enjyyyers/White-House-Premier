@@ -33,7 +33,7 @@ class PageController extends Controller
     public function contact()
     {
         $contactInfo = [
-            'address' => 'Jl. Kebon Sirih No. 45, Jakarta Pusat, DKI Jakarta',
+            'address' => 'Marketing Gallery White House Premier, Tapos, Depok, Jawa Barat',
             'phone' => '(021) 1234-5678',
             'whatsapp' => '+62 812-3456-7890',
             'email' => 'info@whitehousepremiere.co.id',
@@ -42,19 +42,9 @@ class PageController extends Controller
 
         $offices = [
             [
-                'city' => 'Jakarta Pusat',
-                'address' => 'Jl. Kebon Sirih No. 45, Jakarta Pusat',
+                'city' => 'Marketing Gallery',
+                'address' => 'Marketing Gallery White House Premier, Tapos, Depok, Jawa Barat',
                 'phone' => '(021) 1234-5678'
-            ],
-            [
-                'city' => 'Jakarta Selatan',
-                'address' => 'Jl. Panglima Polim No. 88, Jakarta Selatan',
-                'phone' => '(021) 8765-4321'
-            ],
-            [
-                'city' => 'Tangerang',
-                'address' => 'Jl. BSD Raya Utama No. 10, Tangerang',
-                'phone' => '(021) 9999-0000'
             ]
         ];
 
