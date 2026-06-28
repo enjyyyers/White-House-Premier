@@ -26,13 +26,21 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="flex border-b border-gray-100">
-            @foreach(['all' => 'Semua', 'booking' => 'Booking Fee', 'dp' => 'DP (20%)', 'cash' => 'Full Cash'] as $key => $label)
-                <a href="{{ route('admin.transaction.index', ['tab' => $key]) }}"
-                   class="px-6 py-4 text-sm font-medium transition {{ $tab == $key ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50' }}">
-                    {{ $label }}
+        <div class="flex items-center justify-between border-b border-gray-100">
+            <div class="flex">
+                @foreach(['all' => 'Semua', 'booking' => 'Booking Fee', 'dp' => 'DP (20%)', 'cash' => 'Full Cash'] as $key => $label)
+                    <a href="{{ route('admin.transaction.index', ['tab' => $key]) }}"
+                       class="px-6 py-4 text-sm font-medium transition {{ $tab == $key ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
+            </div>
+            <div class="px-4">
+                <a href="{{ route('admin.transaction.excel', ['tab' => $tab]) }}"
+                   class="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                    <i class="fas fa-file-excel mr-2"></i> Export Excel
                 </a>
-            @endforeach
+            </div>
         </div>
 
         <div class="overflow-x-auto">

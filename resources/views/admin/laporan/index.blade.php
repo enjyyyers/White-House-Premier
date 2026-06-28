@@ -17,6 +17,9 @@
             <a href="{{ route('admin.laporan-admin.pdf') }}" class="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
             </a>
+            <a href="{{ route('admin.laporan-admin.excel') }}" class="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                <i class="fas fa-file-excel mr-2"></i> Export Excel
+            </a>
         </div>
     </div>
 

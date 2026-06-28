@@ -147,6 +147,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // 1. Halaman Utama Tabel Transaksi Admin
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transaction.index');
 
+    // 1b. Export Excel (harus sebelum {id} biar gak bentrok)
+    Route::get('/transactions/excel/export', [AdminTransactionController::class, 'exportExcel'])->name('transaction.excel');
+
     // 2. Halaman Detail Transaksi Admin
     Route::get('/transactions/{id}', [AdminTransactionController::class, 'show'])->name('transaction.show');
 
@@ -159,6 +162,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Laporan Admin
     Route::get('/laporan-admin', [AdminReportController::class, 'index'])->name('laporan-admin.index');
     Route::get('/laporan-admin/pdf', [AdminReportController::class, 'exportPdf'])->name('laporan-admin.pdf');
+    Route::get('/laporan-admin/excel', [AdminReportController::class, 'exportExcel'])->name('laporan-admin.excel');
     Route::post('/laporan-admin/{id}/jenis-kelamin', [AdminReportController::class, 'updateJenisKelamin'])->name('laporan-admin.update-jenis-kelamin');
     Route::post('/laporan-admin/{id}/regenerate', [AdminReportController::class, 'regenerate'])->name('laporan-admin.regenerate');
 });

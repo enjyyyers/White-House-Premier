@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Exports\TransactionExport;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Property;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
@@ -178,5 +180,12 @@ class TransactionController extends Controller
         $transaction->delete();
 
         return redirect()->route('admin.transaction.index')->with('success', 'Data transaksi berhasil dihapus dari sistem.');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $tab = $request->query('tab', 'all');
+        $filename = 'laporan-penjualan-' . now()->format('YmdHis') . '.xlsx';
+        return Excel::download(new TransactionExport($tab), $filename);
     }
 }

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Exports\AdminReportExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminReportController extends Controller
 {
@@ -71,5 +73,11 @@ class AdminReportController extends Controller
         $pdf->setPaper('A4', 'landscape');
 
         return $pdf->download('laporan-data-admin-whp-' . now()->format('YmdHis') . '.pdf');
+    }
+
+    public function exportExcel()
+    {
+        $filename = 'laporan-data-admin-' . now()->format('YmdHis') . '.xlsx';
+        return Excel::download(new AdminReportExport, $filename);
     }
 }
