@@ -3,7 +3,7 @@
         'name' => 'whitehouse/premiere',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd5b153a4bd25f0c531b6af9fb280990cc7f4b5da',
+        'reference' => '53e8b08c79791edfefaa2e843ccf15de112de8a0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1490,7 +1490,7 @@
         'whitehouse/premiere' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd5b153a4bd25f0c531b6af9fb280990cc7f4b5da',
+            'reference' => '53e8b08c79791edfefaa2e843ccf15de112de8a0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
