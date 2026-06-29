@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class TransactionExport implements
@@ -206,7 +207,7 @@ class TransactionExport implements
                     if ($row % 2 == 0) {
                         $sheet->getStyle('A' . $row . ':M' . $row)->getFill()
                             ->setFillType(Fill::FILL_SOLID)
-                            ->setStartColor(['rgb' => 'F3F4F6']);
+                            ->setStartColor(new Color('F3F4F6'));
                     }
                 }
             },
